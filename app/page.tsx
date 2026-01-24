@@ -69,7 +69,7 @@ export default function Home() {
   const currentSkill = SKILLS.find((s) => s.id === activeSkill)!;
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-x-hidden">
       {/* Dramatic background */}
       <div className="fixed inset-0 pointer-events-none">
         {/* Grid pattern */}
