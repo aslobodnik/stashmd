@@ -5,196 +5,389 @@ import { useState, useRef } from "react";
 // Video player phases
 type VideoPhase = 'idle' | 'playing' | 'done';
 
+// Total duration: 6 seconds
+const TOTAL_DURATION = 6000;
+
 // Scene timing (ms)
-const TOTAL_DURATION = 3000;
-const SCENE_TIMING = {
-  logo: { start: 0, end: 1000 },
-  headline: { start: 800, end: 2200 },
-  cta: { start: 2000, end: 3000 },
+const SCENES = {
+  terminal: { start: 0, end: 1200 },
+  pixelDissolve: { start: 1200, end: 1500 },
+  logo: { start: 1500, end: 2200 },
+  zoomPunch: { start: 2200, end: 2400 },
+  headline: { start: 2400, end: 3400 },
+  slideTransition: { start: 3400, end: 3600 },
+  featureCards: { start: 3600, end: 4500 },
+  whiteFlash: { start: 4500, end: 4700 },
+  cta: { start: 4700, end: 5500 },
+  endCard: { start: 5500, end: 6000 },
 };
 
+// Terminal command to type
+const TERMINAL_COMMAND = 'npx remotion render --skill launch';
+
+// Feature cards content
+const FEATURES = ['Spring physics', 'Character cascade', 'Scene transitions'];
+
 interface SceneProps {
-  progress: number; // 0-1 normalized progress within scene
+  progress: number;
   isActive: boolean;
 }
 
+// Scene 1: Terminal with typing animation
+function TerminalScene({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  const terminalOpacity = Math.min(progress * 6, 1);
+  const typeProgress = Math.max(0, Math.min((progress - 0.17) / 0.66, 1));
+  const charsToShow = Math.floor(typeProgress * TERMINAL_COMMAND.length);
+  const displayedCommand = TERMINAL_COMMAND.slice(0, charsToShow);
+  const cursorVisible = Math.floor(progress * 8) % 2 === 0;
+
+  return (
+    <div
+      className="absolute inset-0 flex items-center justify-center"
+      style={{ opacity: terminalOpacity }}
+    >
+      <div
+        className="rounded-lg overflow-hidden shadow-2xl"
+        style={{
+          background: '#1a1a1a',
+          border: '1px solid #333',
+          width: '85%',
+          maxWidth: '480px',
+        }}
+      >
+        <div
+          className="flex items-center gap-2 px-3 py-2"
+          style={{ background: '#2a2a2a', borderBottom: '1px solid #333' }}
+        >
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full" style={{ background: '#ff5f56' }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: '#ffbd2e' }} />
+            <div className="w-3 h-3 rounded-full" style={{ background: '#27ca40' }} />
+          </div>
+          <span className="text-xs ml-2" style={{ color: '#666' }}>terminal</span>
+        </div>
+        <div className="p-4" style={{ fontFamily: 'var(--font-mono)', fontSize: '14px' }}>
+          <div className="flex">
+            <span style={{ color: '#22c55e' }}>$ </span>
+            <span style={{ color: '#fafafa' }}>{displayedCommand}</span>
+            <span
+              style={{
+                color: '#fafafa',
+                opacity: cursorVisible ? 1 : 0,
+                marginLeft: '1px',
+              }}
+            >
+              █
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Transition 1: Pixel dissolve
+function PixelDissolve({ progress, isActive }: SceneProps) {
+  if (!isActive || progress <= 0) return null;
+
+  const gridSize = 10;
+  const pixels = [];
+
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
+      const seed = (x * 7 + y * 13) % 17;
+      const fadeStart = seed / 17;
+      const pixelOpacity = Math.max(0, 1 - (progress - fadeStart) * 2.5);
+
+      pixels.push(
+        <div
+          key={`${x}-${y}`}
+          style={{
+            position: 'absolute',
+            left: `${(x / gridSize) * 100}%`,
+            top: `${(y / gridSize) * 100}%`,
+            width: `${100 / gridSize}%`,
+            height: `${100 / gridSize}%`,
+            background: '#1a1a1a',
+            opacity: pixelOpacity,
+          }}
+        />
+      );
+    }
+  }
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {pixels}
+    </div>
+  );
+}
+
+// Scene 2: Logo with character cascade
 function LogoScene({ progress, isActive }: SceneProps) {
-  // Fade in during first 50%, hold, fade out last 20%
-  const fadeIn = Math.min(progress * 2, 1);
-  const fadeOut = progress > 0.8 ? 1 - ((progress - 0.8) / 0.2) : 1;
-  const opacity = isActive ? fadeIn * fadeOut : 0;
-  const scale = 0.95 + (Math.min(progress, 0.5) * 2 * 0.05); // 0.95 -> 1
+  if (!isActive) return null;
+
+  const logoText = 'stash';
+  const extText = '.md';
+  const allChars = logoText + extText;
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="text-5xl font-medium" style={{ fontFamily: 'var(--font-serif)' }}>
+        {allChars.split('').map((char, i) => {
+          const charStart = i * 0.08;
+          const charProgress = Math.max(0, Math.min((progress - charStart) / 0.25, 1));
+
+          // Bouncy spring
+          const bounce = charProgress < 1
+            ? Math.sin(charProgress * Math.PI * 2.5) * (1 - charProgress) * 0.4
+            : 0;
+
+          const translateY = (1 - charProgress) * 50 + bounce * 25;
+          const rotate = (1 - charProgress) * -20 + bounce * 10;
+          const opacity = Math.min(charProgress * 2.5, 1);
+          const isGold = i >= logoText.length;
+
+          return (
+            <span
+              key={i}
+              className="inline-block"
+              style={{
+                transform: `translateY(${translateY}px) rotate(${rotate}deg)`,
+                opacity,
+                color: isGold ? 'var(--accent-gold)' : 'var(--text-primary)',
+                fontStyle: isGold ? 'italic' : 'normal',
+              }}
+            >
+              {char}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// Scene 3: Headline with character rain and highlight wipe
+function HeadlineScene({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  const line1 = 'AI skills that';
+  const line2 = 'prove themselves';
+
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center">
+      {/* Line 1: Characters rain from top */}
+      <div
+        className="text-3xl mb-2 text-center"
+        style={{ fontFamily: 'var(--font-serif)' }}
+      >
+        {line1.split('').map((char, i) => {
+          const charStart = i * 0.02;
+          const charProgress = Math.max(0, Math.min((progress - charStart) / 0.12, 1));
+          const bounce = charProgress >= 1 ? 0 : Math.sin(charProgress * Math.PI) * (1 - charProgress) * 0.3;
+          const translateY = (1 - charProgress) * -40 + bounce * -15;
+          const opacity = Math.min(charProgress * 3, 1);
+
+          return (
+            <span
+              key={i}
+              className="inline-block"
+              style={{
+                transform: `translateY(${translateY}px)`,
+                opacity,
+                color: 'var(--text-primary)',
+              }}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </span>
+          );
+        })}
+      </div>
+
+      {/* Line 2: Scale punch + highlight wipe */}
+      <div
+        className="text-3xl text-center relative"
+        style={{ fontFamily: 'var(--font-serif)' }}
+      >
+        {(() => {
+          let scale = 0;
+          let opacity = 0;
+          if (progress >= 0.35) {
+            const punchProgress = Math.min((progress - 0.35) / 0.25, 1);
+            opacity = Math.min(punchProgress * 3, 1);
+            if (punchProgress < 0.5) {
+              scale = (punchProgress / 0.5) * 1.25;
+            } else {
+              scale = 1.25 - ((punchProgress - 0.5) / 0.5) * 0.25;
+            }
+          }
+
+          const highlightProgress = progress >= 0.65
+            ? Math.min((progress - 0.65) / 0.3, 1)
+            : 0;
+
+          return (
+            <span
+              className="relative inline-block"
+              style={{
+                transform: `scale(${scale})`,
+                opacity,
+                color: 'var(--accent-gold)',
+                fontStyle: 'italic',
+              }}
+            >
+              <span
+                className="absolute inset-y-0 -inset-x-2 -z-10 rounded"
+                style={{
+                  background: 'var(--accent-gold)',
+                  opacity: 0.15,
+                  transform: `scaleX(${highlightProgress})`,
+                  transformOrigin: 'left center',
+                }}
+              />
+              {line2}
+            </span>
+          );
+        })()}
+      </div>
+    </div>
+  );
+}
+
+// Scene 4: Feature cards with 3D flip
+function FeatureCards({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  return (
+    <div className="absolute inset-0 flex items-center justify-center gap-3 px-4">
+      {FEATURES.map((feature, i) => {
+        const cardStart = i * 0.2;
+        const cardProgress = Math.max(0, Math.min((progress - cardStart) / 0.22, 1));
+        const rotateY = (1 - cardProgress) * -90;
+        const opacity = cardProgress;
+        const floatOffset = cardProgress >= 1
+          ? Math.sin((progress - cardStart - 0.22) * 12) * 2
+          : 0;
+
+        return (
+          <div
+            key={feature}
+            className="px-3 py-2 rounded-lg text-center"
+            style={{
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--border-subtle)',
+              borderBottom: '2px solid var(--accent-gold)',
+              transform: `perspective(600px) rotateY(${rotateY}deg) translateY(${floatOffset}px)`,
+              opacity,
+              minWidth: '100px',
+            }}
+          >
+            <span
+              className="text-xs font-medium"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              {feature}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Transition: White flash
+function WhiteFlash({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  let opacity = 0;
+  if (progress < 0.5) {
+    opacity = progress * 2 * 0.7;
+  } else {
+    opacity = (1 - progress) * 2 * 0.7;
+  }
+
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{ background: 'white', opacity }}
+    />
+  );
+}
+
+// Scene 5: CTA with heavy spring
+function CTAScene({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  let translateY = 60;
+  let opacity = 0;
+  let glowIntensity = 0;
+
+  if (progress > 0) {
+    opacity = Math.min(progress * 4, 1);
+
+    if (progress < 0.45) {
+      const springProgress = progress / 0.45;
+      translateY = 60 * (1 - springProgress * 1.2);
+      if (translateY < -10) {
+        translateY = -10 + (springProgress - 0.37) * 30;
+      }
+    } else {
+      translateY = 0;
+    }
+
+    if (progress >= 0.5 && progress < 0.7) {
+      glowIntensity = Math.sin(((progress - 0.5) / 0.2) * Math.PI);
+    } else if (progress >= 0.75 && progress < 0.95) {
+      glowIntensity = Math.sin(((progress - 0.75) / 0.2) * Math.PI);
+    }
+  }
 
   return (
     <div
       className="absolute inset-0 flex items-center justify-center"
       style={{
         opacity,
-        transform: `scale(${scale})`,
-        transition: 'opacity 100ms ease-out',
-      }}
-    >
-      <span
-        className="text-5xl font-medium"
-        style={{
-          fontFamily: 'var(--font-serif)',
-          color: 'var(--text-primary)',
-        }}
-      >
-        stash
-      </span>
-    </div>
-  );
-}
-
-const HEADLINE_INTRO = ['AI', 'skills', 'that'];
-const HEADLINE_PAYOFF = ['prove', 'themselves'];
-
-function HeadlineScene({ progress, isActive }: SceneProps) {
-  // Timeline within scene:
-  // 0-0.4: words stagger in
-  // 0.4-0.65: punch scale
-  // 0.65-1.0: shimmer + hold
-
-  // Words stagger (3 words over 0-0.4 progress)
-  const wordsVisible = Math.min(Math.floor(progress / 0.13) + 1, 3);
-
-  // Punch animation (0.4-0.65)
-  let punchScale = 0;
-  let showPayoff = false;
-  if (progress >= 0.4) {
-    showPayoff = true;
-    const punchProgress = Math.min((progress - 0.4) / 0.25, 1);
-    // Overshoot: 0 -> 1.15 -> 1
-    if (punchProgress < 0.5) {
-      punchScale = (punchProgress / 0.5) * 1.15;
-    } else {
-      punchScale = 1.15 - ((punchProgress - 0.5) / 0.5) * 0.15;
-    }
-  }
-
-  // Shimmer (0.65-1.0)
-  const shimmerProgress = progress >= 0.65
-    ? Math.min((progress - 0.65) / 0.35, 1)
-    : 0;
-
-  if (!isActive) return null;
-
-  return (
-    <div
-      className="absolute inset-0 flex flex-col items-center justify-center"
-      style={{ opacity: isActive ? 1 : 0 }}
-    >
-      {/* "AI skills that" */}
-      <div
-        className="text-3xl leading-tight mb-1 text-center"
-        style={{ fontFamily: 'var(--font-serif)' }}
-      >
-        {HEADLINE_INTRO.map((word, i) => (
-          <span
-            key={word}
-            className="inline-block mx-1 transition-all duration-300 ease-out"
-            style={{
-              opacity: wordsVisible > i ? 1 : 0,
-              transform: wordsVisible > i ? 'translateY(0)' : 'translateY(16px)',
-            }}
-          >
-            <span style={{ color: 'var(--text-primary)' }}>{word}</span>
-          </span>
-        ))}
-      </div>
-
-      {/* "prove themselves" - the punch */}
-      <div
-        className="text-3xl leading-tight text-center"
-        style={{ fontFamily: 'var(--font-serif)' }}
-      >
-        {HEADLINE_PAYOFF.map((word, i) => (
-          <span
-            key={word}
-            className="inline-block mx-1 transition-all duration-200 ease-out relative"
-            style={{
-              opacity: showPayoff ? 1 : 0,
-              transform: `scale(${showPayoff ? punchScale : 0})`,
-              color: 'var(--accent-gold)',
-              fontStyle: 'italic',
-            }}
-          >
-            {word}
-            {/* Shimmer overlay */}
-            {shimmerProgress > 0 && shimmerProgress < 1 && (
-              <span
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: `linear-gradient(90deg,
-                    transparent ${shimmerProgress * 100 - 25}%,
-                    rgba(255,255,255,0.6) ${shimmerProgress * 100}%,
-                    transparent ${shimmerProgress * 100 + 25}%
-                  )`,
-                  mixBlendMode: 'overlay',
-                }}
-              />
-            )}
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CTAScene({ progress, isActive }: SceneProps) {
-  // Slide up with spring overshoot
-  // 0-0.6: slide up with overshoot
-  // 0.6-0.8: glow pulse
-  // 0.8-1: hold
-
-  let translateY = 30;
-  let opacity = 0;
-  let glowIntensity = 0;
-
-  if (isActive && progress > 0) {
-    opacity = Math.min(progress * 3, 1);
-
-    // Spring overshoot for position
-    if (progress < 0.6) {
-      const springProgress = progress / 0.6;
-      // Overshoot to -5, then settle to 0
-      translateY = 30 * (1 - springProgress * 1.15);
-      if (translateY < -5) translateY = -5 + (springProgress - 0.87) * 50;
-    } else {
-      translateY = 0;
-    }
-
-    // Glow pulse at 0.6-0.8
-    if (progress >= 0.6 && progress < 0.8) {
-      glowIntensity = Math.sin(((progress - 0.6) / 0.2) * Math.PI);
-    }
-  }
-
-  return (
-    <div
-      className="absolute inset-x-0 bottom-12 flex justify-center"
-      style={{
-        opacity,
         transform: `translateY(${translateY}px)`,
-        transition: 'opacity 100ms ease-out',
       }}
     >
       <div
-        className="px-5 py-2 rounded-full text-sm font-medium"
+        className="px-6 py-3 rounded-full text-base font-medium"
         style={{
           fontFamily: 'var(--font-mono)',
           color: 'var(--accent-gold)',
-          border: '1px solid var(--accent-gold)',
+          border: '2px solid var(--accent-gold)',
           background: 'var(--bg-surface)',
           boxShadow: glowIntensity > 0
-            ? `0 0 ${20 * glowIntensity}px var(--glow-gold)`
+            ? `0 0 ${35 * glowIntensity}px var(--glow-gold)`
             : 'none',
         }}
       >
         See the demos →
       </div>
     </div>
+  );
+}
+
+// Scene 6: End card shimmer
+function EndCard({ progress, isActive }: SceneProps) {
+  if (!isActive) return null;
+
+  const shimmerX = progress * 150 - 25;
+
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none overflow-hidden"
+      style={{
+        background: `linear-gradient(90deg,
+          transparent ${shimmerX - 25}%,
+          rgba(251, 191, 36, 0.12) ${shimmerX}%,
+          transparent ${shimmerX + 25}%
+        )`,
+      }}
+    />
   );
 }
 
@@ -205,21 +398,24 @@ interface VideoPlayerProps {
 }
 
 function VideoPlayer({ currentTime, isPlaying, isComplete }: VideoPlayerProps) {
-  // Calculate scene progress
-  const getSceneProgress = (scene: { start: number; end: number }) => {
+  const getProgress = (scene: { start: number; end: number }) => {
     if (currentTime < scene.start) return 0;
     if (currentTime > scene.end) return 1;
     return (currentTime - scene.start) / (scene.end - scene.start);
   };
 
-  const logoProgress = getSceneProgress(SCENE_TIMING.logo);
-  const headlineProgress = getSceneProgress(SCENE_TIMING.headline);
-  const ctaProgress = getSceneProgress(SCENE_TIMING.cta);
+  const isInScene = (scene: { start: number; end: number }, buffer = 100) => {
+    return currentTime >= scene.start && currentTime <= scene.end + buffer;
+  };
 
-  // Timeline progress
+  // Zoom punch scale
+  const zoomProgress = getProgress(SCENES.zoomPunch);
+  const zoomScale = isInScene(SCENES.zoomPunch, 0)
+    ? (zoomProgress < 0.5 ? 1 + (zoomProgress / 0.5) * 0.12 : 1.12 - ((zoomProgress - 0.5) / 0.5) * 0.12)
+    : 1;
+
   const timelineProgress = currentTime / TOTAL_DURATION;
 
-  // Format timestamp
   const formatTime = (ms: number) => {
     const seconds = Math.floor(ms / 1000);
     return `0:0${seconds}`;
@@ -237,41 +433,64 @@ function VideoPlayer({ currentTime, isPlaying, isComplete }: VideoPlayerProps) {
       }}
     >
       {/* Scene container */}
-      <div className="absolute inset-0">
+      <div
+        className="absolute inset-0"
+        style={{ transform: `scale(${zoomScale})` }}
+      >
+        <TerminalScene
+          progress={getProgress(SCENES.terminal)}
+          isActive={isInScene(SCENES.terminal)}
+        />
+        <PixelDissolve
+          progress={getProgress(SCENES.pixelDissolve)}
+          isActive={isInScene(SCENES.pixelDissolve)}
+        />
         <LogoScene
-          progress={logoProgress}
-          isActive={currentTime >= SCENE_TIMING.logo.start && currentTime <= SCENE_TIMING.logo.end + 200}
+          progress={getProgress(SCENES.logo)}
+          isActive={currentTime >= SCENES.logo.start && currentTime < SCENES.headline.start}
         />
         <HeadlineScene
-          progress={headlineProgress}
-          isActive={currentTime >= SCENE_TIMING.headline.start}
+          progress={getProgress(SCENES.headline)}
+          isActive={currentTime >= SCENES.headline.start && currentTime < SCENES.featureCards.start}
+        />
+        <FeatureCards
+          progress={getProgress(SCENES.featureCards)}
+          isActive={currentTime >= SCENES.featureCards.start && currentTime < SCENES.cta.start}
         />
         <CTAScene
-          progress={ctaProgress}
-          isActive={currentTime >= SCENE_TIMING.cta.start}
+          progress={getProgress(SCENES.cta)}
+          isActive={currentTime >= SCENES.cta.start}
         />
       </div>
+
+      {/* Overlay effects */}
+      <WhiteFlash
+        progress={getProgress(SCENES.whiteFlash)}
+        isActive={isInScene(SCENES.whiteFlash, 0)}
+      />
+      <EndCard
+        progress={getProgress(SCENES.endCard)}
+        isActive={isInScene(SCENES.endCard)}
+      />
 
       {/* Timeline bar */}
       <div
         className="absolute bottom-0 left-0 right-0 h-8 flex items-center px-3 gap-3"
         style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 100%)' }}
       >
-        {/* Progress track */}
         <div
           className="flex-1 h-1 rounded-full overflow-hidden"
           style={{ background: 'var(--bg-elevated)' }}
         >
           <div
-            className="h-full rounded-full transition-all duration-100"
+            className="h-full rounded-full"
             style={{
               width: `${timelineProgress * 100}%`,
               background: 'linear-gradient(90deg, var(--accent-gold), var(--accent-amber))',
+              transition: 'width 50ms linear',
             }}
           />
         </div>
-
-        {/* Timestamp */}
         <span
           className="text-xs tabular-nums"
           style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}
@@ -283,15 +502,13 @@ function VideoPlayer({ currentTime, isPlaying, isComplete }: VideoPlayerProps) {
   );
 }
 
-
 export function RemotonDemo() {
   const [phase, setPhase] = useState<VideoPhase>('idle');
-  const [currentTime, setCurrentTime] = useState(0); // 0-3000ms
+  const [currentTime, setCurrentTime] = useState(0);
   const animationRef = useRef<number | null>(null);
 
   const handleTryIt = () => {
     if (phase === 'done') {
-      // Reset
       setPhase('idle');
       setCurrentTime(0);
       return;
@@ -344,7 +561,7 @@ export function RemotonDemo() {
           <div className="flex items-start gap-2">
             <span style={{ color: "var(--accent-gold)" }}>❯</span>
             <p style={{ color: "var(--text-primary)" }}>
-              Create a promo video for my{" "}
+              Render my launch video with{" "}
               <span
                 className="px-1.5 py-0.5 rounded font-medium"
                 style={{
@@ -352,8 +569,9 @@ export function RemotonDemo() {
                   color: "var(--accent-purple)",
                 }}
               >
-                product launch
-              </span>
+                spring physics
+              </span>{" "}
+              and scene transitions
             </p>
           </div>
         </div>
@@ -382,7 +600,7 @@ export function RemotonDemo() {
               {phase === 'done' ? "Video rendered" : "Static frames"}
             </p>
             <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              {phase === 'done' ? "3-scene composition" : "No animation"}
+              {phase === 'done' ? "6-scene composition" : "No animation"}
             </p>
           </div>
         </div>
@@ -456,19 +674,19 @@ export function RemotonDemo() {
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500" />
               <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                Sequenced scenes
+                6 scenes
               </span>
             </div>
             <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
             <div className="flex items-center gap-2">
               <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                Spring physics
+                5 transitions
               </span>
             </div>
             <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
             <div className="flex items-center gap-2">
               <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                3s runtime
+                Character cascade
               </span>
             </div>
           </>
