@@ -1,7 +1,27 @@
-"use client";
+# Remotion Video Player Demo Implementation Plan
 
-import { useState, useRef } from "react";
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
+**Goal:** Replace side-by-side headline panels with a video player showing a 3-scene promo video composition.
+
+**Architecture:** Single video player container with timeline bar. Three scene components (Logo, Headline, CTA) animate in sequence driven by a master timer. requestAnimationFrame tracks elapsed time, each scene receives normalized progress.
+
+**Tech Stack:** React, useState, useRef, requestAnimationFrame, CSS transforms
+
+---
+
+## Tasks
+
+### Task 1: Update State and Types
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Replace animation types and constants**
+
+Remove lines 5-12 (old AnimationPhase type and word arrays). Replace with:
+
+```tsx
 // Video player phases
 type VideoPhase = 'idle' | 'playing' | 'done';
 
@@ -12,7 +32,30 @@ const SCENE_TIMING = {
   headline: { start: 800, end: 2200 },
   cta: { start: 2000, end: 3000 },
 };
+```
 
+**Step 2: Update state variables in RemotonDemo**
+
+Replace lines 210-225 state declarations with:
+
+```tsx
+const [phase, setPhase] = useState<VideoPhase>('idle');
+const [currentTime, setCurrentTime] = useState(0); // 0-3000ms
+const animationRef = useRef<number | null>(null);
+```
+
+---
+
+### Task 2: Create LogoScene Component
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Add LogoScene component**
+
+Add after the type definitions, before RemotonDemo:
+
+```tsx
 interface SceneProps {
   progress: number; // 0-1 normalized progress within scene
   isActive: boolean;
@@ -46,7 +89,20 @@ function LogoScene({ progress, isActive }: SceneProps) {
     </div>
   );
 }
+```
 
+---
+
+### Task 3: Create HeadlineScene Component
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Add HeadlineScene component**
+
+Add after LogoScene:
+
+```tsx
 const HEADLINE_INTRO = ['AI', 'skills', 'that'];
 const HEADLINE_PAYOFF = ['prove', 'themselves'];
 
@@ -141,7 +197,20 @@ function HeadlineScene({ progress, isActive }: SceneProps) {
     </div>
   );
 }
+```
 
+---
+
+### Task 4: Create CTAScene Component
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Add CTAScene component**
+
+Add after HeadlineScene:
+
+```tsx
 function CTAScene({ progress, isActive }: SceneProps) {
   // Slide up with spring overshoot
   // 0-0.6: slide up with overshoot
@@ -197,7 +266,20 @@ function CTAScene({ progress, isActive }: SceneProps) {
     </div>
   );
 }
+```
 
+---
+
+### Task 5: Create VideoPlayer Component
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Add VideoPlayer component**
+
+Add after CTAScene:
+
+```tsx
 interface VideoPlayerProps {
   currentTime: number;
   isPlaying: boolean;
@@ -282,205 +364,239 @@ function VideoPlayer({ currentTime, isPlaying, isComplete }: VideoPlayerProps) {
     </div>
   );
 }
+```
 
+---
 
-export function RemotonDemo() {
-  const [phase, setPhase] = useState<VideoPhase>('idle');
-  const [currentTime, setCurrentTime] = useState(0); // 0-3000ms
-  const animationRef = useRef<number | null>(null);
+### Task 6: Update handleApply Function
 
-  const handleTryIt = () => {
-    if (phase === 'done') {
-      // Reset
-      setPhase('idle');
-      setCurrentTime(0);
-      return;
-    }
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
 
-    setPhase('playing');
+**Step 1: Replace handleApply**
+
+Replace the entire handleApply function with:
+
+```tsx
+const handleTryIt = () => {
+  if (phase === 'done') {
+    // Reset
+    setPhase('idle');
     setCurrentTime(0);
+    return;
+  }
 
-    const startTime = Date.now();
+  setPhase('playing');
+  setCurrentTime(0);
 
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      setCurrentTime(Math.min(elapsed, TOTAL_DURATION));
+  const startTime = Date.now();
 
-      if (elapsed < TOTAL_DURATION) {
-        animationRef.current = requestAnimationFrame(animate);
-      } else {
-        setPhase('done');
-      }
-    };
+  const animate = () => {
+    const elapsed = Date.now() - startTime;
+    setCurrentTime(Math.min(elapsed, TOTAL_DURATION));
 
-    animationRef.current = requestAnimationFrame(animate);
+    if (elapsed < TOTAL_DURATION) {
+      animationRef.current = requestAnimationFrame(animate);
+    } else {
+      setPhase('done');
+    }
   };
 
-  return (
-    <div className="w-full">
-      {/* Terminal prompt */}
-      <div
-        className="mb-6 rounded-xl overflow-hidden"
-        style={{
-          background: "var(--bg-deep)",
-          border: "1px solid var(--border-subtle)",
-        }}
-      >
-        <div
-          className="flex items-center gap-2 px-4 py-2"
-          style={{ borderBottom: "1px solid var(--border-subtle)" }}
-        >
-          <div className="flex gap-1.5">
-            <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
-            <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
-            <div className="w-3 h-3 rounded-full bg-[#27ca40]" />
-          </div>
-          <span className="text-xs ml-2" style={{ color: "var(--text-muted)" }}>
-            remotion
-          </span>
-        </div>
+  animationRef.current = requestAnimationFrame(animate);
+};
+```
 
-        <div className="p-4 text-sm">
-          <div className="flex items-start gap-2">
-            <span style={{ color: "var(--accent-gold)" }}>❯</span>
-            <p style={{ color: "var(--text-primary)" }}>
-              Create a promo video for my{" "}
-              <span
-                className="px-1.5 py-0.5 rounded font-medium"
-                style={{
-                  background: "var(--glow-purple)",
-                  color: "var(--accent-purple)",
-                }}
-              >
-                product launch
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
+---
 
-      {/* Action bar */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div
-            className="relative flex items-center justify-center w-8 h-8 rounded-lg"
-            style={{
-              background: phase === 'done' ? "var(--glow-gold)" : "var(--bg-elevated)",
-              border: `1px solid ${phase === 'done' ? "var(--accent-gold)" : "var(--border-subtle)"}`,
-            }}
-          >
-            {phase === 'done' ? (
-              <svg className="w-4 h-4" fill="none" stroke="var(--accent-gold)" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-              </svg>
-            ) : (
-              <div className="w-2 h-2 rounded-full" style={{ background: "var(--text-muted)" }} />
-            )}
-          </div>
-          <div>
-            <p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
-              {phase === 'done' ? "Video rendered" : "Static frames"}
-            </p>
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              {phase === 'done' ? "3-scene composition" : "No animation"}
-            </p>
-          </div>
-        </div>
+### Task 7: Update Terminal Prompt
 
-        <button
-          onClick={handleTryIt}
-          disabled={phase === 'playing'}
-          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden"
-          style={{
-            background: phase === 'done'
-              ? "transparent"
-              : "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%)",
-            color: phase === 'done' ? "var(--text-muted)" : "var(--bg-deep)",
-            border: phase === 'done' ? "1px solid var(--border)" : "none",
-            boxShadow: phase === 'done' ? "none" : "0 4px 24px var(--glow-gold)",
-            opacity: phase === 'playing' ? 0.7 : 1,
-            cursor: phase === 'playing' ? "not-allowed" : "pointer",
-          }}
-        >
-          {phase !== 'done' && (
-            <div
-              className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              style={{
-                background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)",
-                animation: "shimmer 2s infinite",
-              }}
-            />
-          )}
-          {phase === 'done' ? (
-            <>
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              <span>Try again</span>
-            </>
-          ) : (
-            <>
-              <span className="relative z-10">Try it</span>
-              <svg className="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </>
-          )}
-        </button>
-      </div>
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
 
-      {/* Video Player */}
-      <VideoPlayer
-        currentTime={currentTime}
-        isPlaying={phase === 'playing'}
-        isComplete={phase === 'done'}
-      />
+**Step 1: Update prompt text**
 
-      {/* Result indicator */}
-      <div
-        className="mt-4 flex items-center justify-center gap-4 py-3 rounded-xl transition-all duration-500"
-        style={{
-          background: phase === 'done' ? "var(--bg-surface)" : "transparent",
-          border: phase === 'done' ? "1px solid var(--border-subtle)" : "1px solid transparent",
-        }}
-      >
-        {phase !== 'done' ? (
-          <div className="flex items-center gap-2">
-            <span className="text-sm" style={{ color: "var(--text-muted)" }}>
-              Static frames only
-            </span>
-          </div>
-        ) : (
-          <>
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                Sequenced scenes
-              </span>
-            </div>
-            <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
-            <div className="flex items-center gap-2">
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                Spring physics
-              </span>
-            </div>
-            <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
-            <div className="flex items-center gap-2">
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
-                3s runtime
-              </span>
-            </div>
-          </>
-        )}
-      </div>
+Find the terminal prompt section and update the text content:
 
-      <style jsx>{`
-        @keyframes shimmer {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(100%); }
-        }
-      `}</style>
+```tsx
+<p style={{ color: "var(--text-primary)" }}>
+  Create a promo video for my{" "}
+  <span
+    className="px-1.5 py-0.5 rounded font-medium"
+    style={{
+      background: "var(--glow-purple)",
+      color: "var(--accent-purple)",
+    }}
+  >
+    product launch
+  </span>
+</p>
+```
+
+---
+
+### Task 8: Update Action Bar and Button
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Update status text**
+
+Replace status text with:
+
+```tsx
+<p className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+  {phase === 'done' ? "Video rendered" : "Static frames"}
+</p>
+<p className="text-xs" style={{ color: "var(--text-muted)" }}>
+  {phase === 'done' ? "3-scene composition" : "No animation"}
+</p>
+```
+
+**Step 2: Update button**
+
+Change `onClick={handleApply}` to `onClick={handleTryIt}`.
+
+Update button disabled state:
+```tsx
+disabled={phase === 'playing'}
+```
+
+Update button styling conditions - replace `isApplied` with `phase === 'done'` and `isAnimating` with `phase === 'playing'`.
+
+Update button text:
+```tsx
+{phase === 'done' ? (
+  <>
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+    <span>Try again</span>
+  </>
+) : (
+  <>
+    <span className="relative z-10">Try it</span>
+    <svg className="w-4 h-4 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </>
+)}
+```
+
+---
+
+### Task 9: Replace Main Content Area
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Remove old HeadlinePanel components and imports**
+
+Delete the AnimatedWord component (lines 14-66).
+Delete the HeadlinePanel component (lines 68-207).
+Delete the HeadlinePanelProps interface.
+Delete the AnimatedWordProps interface.
+
+**Step 2: Replace the side-by-side section**
+
+Replace the `{/* Side-by-side headline comparison */}` section with:
+
+```tsx
+{/* Video Player */}
+<VideoPlayer
+  currentTime={currentTime}
+  isPlaying={phase === 'playing'}
+  isComplete={phase === 'done'}
+/>
+```
+
+---
+
+### Task 10: Update Result Indicator
+
+**Files:**
+- Modify: `/Users/slobo/Documents/coding/stashmd/site/app/components/RemotonDemo.tsx`
+
+**Step 1: Replace result indicator**
+
+Replace the result indicator section with:
+
+```tsx
+{/* Result indicator */}
+<div
+  className="mt-4 flex items-center justify-center gap-4 py-3 rounded-xl transition-all duration-500"
+  style={{
+    background: phase === 'done' ? "var(--bg-surface)" : "transparent",
+    border: phase === 'done' ? "1px solid var(--border-subtle)" : "1px solid transparent",
+  }}
+>
+  {phase !== 'done' ? (
+    <div className="flex items-center gap-2">
+      <span className="text-sm" style={{ color: "var(--text-muted)" }}>
+        Static frames only
+      </span>
     </div>
-  );
-}
+  ) : (
+    <>
+      <div className="flex items-center gap-2">
+        <div className="w-2 h-2 rounded-full bg-green-500" />
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          Sequenced scenes
+        </span>
+      </div>
+      <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
+      <div className="flex items-center gap-2">
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          Spring physics
+        </span>
+      </div>
+      <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
+      <div className="flex items-center gap-2">
+        <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+          3s runtime
+        </span>
+      </div>
+    </>
+  )}
+</div>
+```
+
+---
+
+### Task 11: Test and Verify
+
+**Step 1: Run dev server**
+
+```bash
+cd /Users/slobo/Documents/coding/stashmd/site && npm run dev
+```
+
+**Step 2: Verify in browser**
+
+Open http://localhost:3000 and test:
+- [ ] Video player shows 16:9 container with dark gradient
+- [ ] Timeline at bottom shows "0:00 / 0:03"
+- [ ] Click "Try it" - logo fades in and scales
+- [ ] Logo fades out, headline words stagger in
+- [ ] "prove themselves" punches with scale overshoot
+- [ ] Shimmer sweeps across gold text
+- [ ] CTA slides up with spring bounce and glow pulse
+- [ ] Timeline fills left to right over 3 seconds
+- [ ] Timestamp counts up: 0:01, 0:02, 0:03
+- [ ] Gold border appears around player when done
+- [ ] "Try again" resets to idle state
+
+---
+
+### Task 12: Commit
+
+**Step 1: Stage and commit**
+
+```bash
+git add app/components/RemotonDemo.tsx docs/plans/
+git commit -m "replace remotion demo with video player composition
+
+- 3-scene video: logo fade, headline punch, cta slide
+- timeline bar with timestamp
+- 16:9 aspect ratio, looks like real video output"
+```
