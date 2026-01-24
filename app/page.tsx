@@ -108,7 +108,7 @@ export default function Home() {
           >
             AI skills that{" "}
             <span
-              className="italic"
+              className="italic inline-block pb-1"
               style={{
                 background: "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%)",
                 WebkitBackgroundClip: "text",
