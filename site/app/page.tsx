@@ -24,7 +24,7 @@ const SKILLS: Skill[] = [
   {
     id: "frontend-design",
     name: "frontend-design",
-    description: "Stop making sites that look like every other AI generation.",
+    description: "Create distinctive sites.",
     icon: "✦",
     isOfficial: true,
     githubUrl: "https://github.com/anthropics/skills",
@@ -34,7 +34,7 @@ const SKILLS: Skill[] = [
   {
     id: "code-simplifier",
     name: "code-simplifier",
-    description: "Refine code for clarity and maintainability without changing behavior.",
+    description: "Less code is better code.",
     icon: "◇",
     isOfficial: true,
     githubUrl: "https://github.com/anthropics/skills",
@@ -44,7 +44,7 @@ const SKILLS: Skill[] = [
   {
     id: "remotion",
     name: "remotion",
-    description: "Best practices for video creation in React. Avoid common pitfalls.",
+    description: "Motion moves people.",
     icon: "▶",
     isOfficial: false,
     githubUrl: "https://github.com/remotion-dev/skills",
@@ -92,13 +92,6 @@ export default function Home() {
       <main className="relative z-10 max-w-5xl mx-auto px-6 py-20">
         {/* Header */}
         <header className="mb-16 text-center">
-          <div className="inline-flex items-center gap-2 mb-8 px-4 py-2 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-            <span className="text-[var(--accent-gold)] text-sm">&#10022;</span>
-            <span className="text-xs tracking-[0.2em] uppercase" style={{ color: "var(--text-muted)" }}>
-              Skills that ship
-            </span>
-          </div>
-
           <h1
             className="text-5xl md:text-7xl mb-8 leading-[1.05] tracking-tight"
             style={{ fontFamily: "var(--font-display), serif" }}
@@ -120,10 +113,7 @@ export default function Home() {
             className="text-xl md:text-2xl max-w-2xl mx-auto leading-relaxed"
             style={{ color: "var(--text-secondary)" }}
           >
-            See the difference before you install.{" "}
-            <span style={{ color: "var(--text-muted)" }}>
-              Every skill demos its own transformation.
-            </span>
+            Demo first. Install second.
           </p>
         </header>
 
