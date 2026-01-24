@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 interface CopyTransform {
   before: string;
@@ -35,20 +35,74 @@ export function CopyDoctorDemo() {
   const [lineStates, setLineStates] = useState<LineState[]>(
     TRANSFORMS.map(() => "pending")
   );
+  const [strikeProgress, setStrikeProgress] = useState<number[]>(
+    TRANSFORMS.map(() => 0)
+  );
+  const animationRef = useRef<number | null>(null);
 
   const handleApply = () => {
     if (isApplied) {
       // Reset
       setIsApplied(false);
       setLineStates(TRANSFORMS.map(() => "pending"));
+      setStrikeProgress(TRANSFORMS.map(() => 0));
       return;
     }
 
     setIsAnimating(true);
-    // For now, immediately set all lines to complete
-    setLineStates(TRANSFORMS.map(() => "complete"));
-    setIsApplied(true);
-    setIsAnimating(false);
+
+    const PHASE_DURATION = {
+      highlight: 300,
+      strike: 500,
+      replace: 400,
+      pause: 300,
+    };
+    const LINE_TOTAL = PHASE_DURATION.highlight + PHASE_DURATION.strike + PHASE_DURATION.replace + PHASE_DURATION.pause;
+
+    const startTime = Date.now();
+
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+
+      // Determine which line we're on and its phase
+      const newStates: LineState[] = TRANSFORMS.map((_, idx) => {
+        const lineStart = idx * LINE_TOTAL;
+        const lineElapsed = elapsed - lineStart;
+
+        if (lineElapsed < 0) return "pending";
+        if (lineElapsed < PHASE_DURATION.highlight) return "highlighting";
+        if (lineElapsed < PHASE_DURATION.highlight + PHASE_DURATION.strike) return "striking";
+        if (lineElapsed < PHASE_DURATION.highlight + PHASE_DURATION.strike + PHASE_DURATION.replace) return "replacing";
+        return "complete";
+      });
+
+      setLineStates(newStates);
+
+      // Calculate strike-through progress for each line
+      const newStrikeProgress = TRANSFORMS.map((_, idx) => {
+        const lineStart = idx * LINE_TOTAL;
+        const lineElapsed = elapsed - lineStart;
+        const strikeStart = PHASE_DURATION.highlight;
+        const strikeEnd = strikeStart + PHASE_DURATION.strike;
+
+        if (lineElapsed < strikeStart) return 0;
+        if (lineElapsed > strikeEnd) return 1;
+        return (lineElapsed - strikeStart) / PHASE_DURATION.strike;
+      });
+
+      setStrikeProgress(newStrikeProgress);
+
+      const totalDuration = TRANSFORMS.length * LINE_TOTAL;
+      if (elapsed < totalDuration) {
+        animationRef.current = requestAnimationFrame(animate);
+      } else {
+        setIsAnimating(false);
+        setIsApplied(true);
+        setLineStates(TRANSFORMS.map(() => "complete"));
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
   };
 
   return (
