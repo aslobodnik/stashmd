@@ -608,7 +608,7 @@ export function RemotonDemo() {
         <button
           onClick={handleTryIt}
           disabled={phase === 'playing'}
-          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden"
+          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer"
           style={{
             background: phase === 'done'
               ? "transparent"
