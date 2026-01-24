@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BeforeAfterComparison } from "./components/BeforeAfterComparison";
 import { CodeSimplifierDemo } from "./components/CodeSimplifierDemo";
 import { RemotonDemo } from "./components/RemotonDemo";
+import { CopyDoctorDemo } from "./components/CopyDoctorDemo";
 import { InstallSection } from "./components/InstallSection";
 import { SkillCard } from "./components/SkillCard";
 
@@ -129,7 +130,7 @@ export default function Home() {
 
         {/* Skill Grid */}
         <section className="mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {SKILLS.map((skill) => (
               <SkillCard
                 key={skill.id}
@@ -223,6 +224,10 @@ export default function Home() {
 
                 {activeSkill === "remotion" && (
                   <RemotonDemo />
+                )}
+
+                {activeSkill === "copy-doctor" && (
+                  <CopyDoctorDemo />
                 )}
 
                 {/* Install section */}
