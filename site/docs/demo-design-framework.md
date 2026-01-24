@@ -122,6 +122,78 @@ If you can't answer #4 with "yes, unified" - rethink the animation.
 
 ---
 
+## Thematic Deep Dives
+
+The key insight: each skill has ONE core tension that the animation must visualize.
+
+### code-simplifier: Reduction
+
+**Core tension:** Complexity → Simplicity
+
+The skill REMOVES code. The animation must REMOVE visual elements. Container height shrinks AS lines dissolve - not after.
+
+**Why noise dissolution works:**
+- Complexity = noise (glitchy, scrambled characters)
+- Simplicity = signal (clean, stable text)
+- Lines that disappear get noisy first, then collapse
+- Lines that remain stay stable throughout
+
+**Critical constraint:** The container must shrink AS the animation runs. Two-step animations (animate → shrink) feel disconnected.
+
+**What failed:** Generic wand sweep. The wand doesn't relate to "reduction" - it's decoration.
+
+---
+
+### remotion: Motion
+
+**Core tension:** Static → Cinematic
+
+The skill adds motion to video. The animation must BE the motion. Show the actual impact, not code that claims to work.
+
+**Why side-by-side comparison works:**
+- Left panel: Static text appears instantly (baseline)
+- Right panel: Same words with choreographed timing (the skill's value)
+- User sees IDENTICAL content with DIFFERENT impact
+- "prove themselves" literally proves itself with punch animation
+
+**Two-act structure:**
+1. **Act 1 (dramatic):** H1 intro → payoff word PUNCH + shimmer (the wow moment)
+2. **Act 2 (gentle):** H2 fades in softly (contrast, breathing room)
+
+**What failed:**
+- Showing code with "will render" badge - proves nothing, user has to trust you
+- Simultaneous word-by-word animation on both sides - too clever, confusing
+
+---
+
+### frontend-design: Polish
+
+**Core tension:** Generic → Crafted
+
+The skill elevates visual output. The animation must SHOW the visual difference - actual rendered HTML, not code.
+
+**Why wand works here (exception):**
+- The OUTPUT is visual - iframes showing real designs
+- Wand reveals the transformation as it sweeps
+- User sees generic AI output → polished design
+- The proof is immediate and undeniable
+
+**Critical constraint:** Must show REAL output. Showing code defeats the purpose - frontend-design improves visuals, so show visuals.
+
+---
+
+## Pattern Recognition
+
+| Skill Type | Core Tension | Animation Approach |
+|------------|--------------|-------------------|
+| **Reduction** (simplifier, refactor) | More → Less | Elements dissolve, container shrinks |
+| **Motion** (remotion, animation) | Static → Dynamic | Side-by-side, show the motion |
+| **Visual** (frontend, design) | Generic → Polished | Before/after actual output |
+| **Correctness** (types, lint) | Wrong → Right | Error indicators → checkmarks |
+| **Process** (brainstorm, plan) | Chaos → Structure | Steps appear in sequence |
+
+---
+
 ## Examples
 
 ### code-simplifier
