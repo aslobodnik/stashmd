@@ -7,7 +7,7 @@ import { RemotonDemo } from "./components/RemotonDemo";
 import { InstallSection } from "./components/InstallSection";
 import { SkillCard } from "./components/SkillCard";
 
-type SkillId = "frontend-design" | "code-simplifier" | "remotion";
+type SkillId = "frontend-design" | "code-simplifier" | "remotion" | "copy-doctor";
 
 interface Skill {
   id: SkillId;
@@ -50,6 +50,16 @@ const SKILLS: Skill[] = [
     githubUrl: "https://github.com/remotion-dev/skills",
     repoUrl: "https://github.com/remotion-dev/skills",
     installs: "2.3k",
+  },
+  {
+    id: "copy-doctor",
+    name: "copy-doctor",
+    description: "Words that sell.",
+    icon: "✂",
+    isOfficial: false,
+    githubUrl: "https://github.com/slobo/skills",
+    repoUrl: "https://github.com/slobo/skills",
+    installs: "1.2k",
   },
 ];
 
