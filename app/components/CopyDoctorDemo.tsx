@@ -225,18 +225,28 @@ export function CopyDoctorDemo() {
 
             return (
               <div key={idx} className="relative">
-                {/* After text - shown above when complete */}
-                <div
-                  className="text-lg font-medium mb-2 transition-all duration-500"
+              {/* Replacement text (above) */}
+              <div
+                className="mb-1 transition-all duration-400 ease-out"
+                style={{
+                  opacity: lineStates[idx] === "replacing" || lineStates[idx] === "complete" ? 1 : 0,
+                  transform: lineStates[idx] === "replacing" || lineStates[idx] === "complete"
+                    ? "translateY(0)"
+                    : "translateY(8px)",
+                  height: lineStates[idx] === "replacing" || lineStates[idx] === "complete" ? "auto" : 0,
+                  overflow: "hidden",
+                }}
+              >
+                <span
+                  className="text-lg font-medium inline-block"
                   style={{
-                    color: isComplete ? "var(--accent-gold)" : "transparent",
-                    textShadow: isComplete ? "0 0 20px var(--glow-gold)" : "none",
-                    opacity: isComplete ? 1 : 0,
-                    transform: isComplete ? "translateY(0)" : "translateY(10px)",
+                    color: "var(--accent-gold)",
+                    textShadow: lineStates[idx] === "complete" ? "0 0 20px var(--glow-gold)" : "none",
                   }}
                 >
                   {transform.after}
-                </div>
+                </span>
+              </div>
 
               {/* Original text with animated strike-through */}
               <div className="relative inline-block">
