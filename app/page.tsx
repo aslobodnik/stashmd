@@ -104,16 +104,18 @@ export default function Home() {
         {/* Header */}
         <header className="mb-16 text-center">
           <h1
-            className="text-5xl md:text-7xl mb-8 leading-[1.05] tracking-tight"
-            style={{ fontFamily: "var(--font-display), serif" }}
+            className="text-5xl md:text-7xl mb-8 leading-[1.15] tracking-tight"
+            style={{ fontFamily: "var(--font-display), serif", overflow: "visible" }}
           >
             AI skills that{" "}
             <span
-              className="italic inline-block pb-2"
+              className="italic"
               style={{
                 background: "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                boxDecorationBreak: "clone",
+                WebkitBoxDecorationBreak: "clone",
               }}
             >
               prove themselves
