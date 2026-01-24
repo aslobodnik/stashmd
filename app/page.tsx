@@ -129,8 +129,8 @@ export default function Home() {
         </header>
 
         {/* Skill Grid */}
-        <section className="mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <section className="mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-3xl mx-auto">
             {SKILLS.map((skill) => (
               <SkillCard
                 key={skill.id}

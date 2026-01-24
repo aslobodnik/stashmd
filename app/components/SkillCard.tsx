@@ -26,7 +26,8 @@ export function SkillCard({
       style={{
         background: isActive ? "var(--bg-surface)" : "transparent",
         border: `1px solid ${isActive ? "var(--accent-gold)" : "var(--border-subtle)"}`,
-        boxShadow: isActive ? "0 0 20px var(--glow-gold)" : "none",
+        boxShadow: isActive ? "0 0 24px var(--glow-gold)" : "none",
+        transform: isActive ? "scale(1.02)" : "scale(1)",
       }}
     >
       {/* Hover glow */}
