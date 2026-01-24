@@ -238,17 +238,36 @@ export function CopyDoctorDemo() {
                   {transform.after}
                 </div>
 
-                {/* Before text - in quotes, muted, line-through when complete */}
-                <p
-                  className="text-sm transition-all duration-500"
+              {/* Original text with animated strike-through */}
+              <div className="relative inline-block">
+                <span
+                  className="text-base leading-relaxed transition-colors duration-300"
                   style={{
-                    color: "var(--text-muted)",
-                    textDecoration: isComplete ? "line-through" : "none",
-                    opacity: isComplete ? 0.5 : 0.8,
+                    color: lineStates[idx] === "complete" || lineStates[idx] === "striking" || lineStates[idx] === "replacing"
+                      ? "rgba(239, 68, 68, 0.5)"
+                      : lineStates[idx] === "highlighting"
+                        ? "var(--text-primary)"
+                        : "var(--text-secondary)",
+                    background: lineStates[idx] === "highlighting"
+                      ? "rgba(251, 191, 36, 0.15)"
+                      : "transparent",
+                    padding: lineStates[idx] === "highlighting" ? "2px 6px" : "0",
+                    borderRadius: "4px",
+                    transition: "background 0.2s, padding 0.2s, color 0.3s",
                   }}
                 >
                   &ldquo;{transform.before}&rdquo;
-                </p>
+                </span>
+                {/* Animated strike-through line */}
+                <div
+                  className="absolute left-0 top-1/2 h-0.5 bg-red-500 pointer-events-none"
+                  style={{
+                    width: `${strikeProgress[idx] * 100}%`,
+                    transform: "translateY(-50%)",
+                    opacity: strikeProgress[idx] > 0 ? 1 : 0,
+                  }}
+                />
+              </div>
               </div>
             );
           })}
