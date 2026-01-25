@@ -64,7 +64,7 @@ const SKILLS: Skill[] = [
     icon: "✂",
     isOfficial: false,
     githubUrl: "https://github.com/aslobodnik/claude-skills/tree/main/skills/copy-doctor",
-    rawFileUrl: "https://raw.githubusercontent.com/aslobodnik/claude-skills/main/skills/copy-doctor/copy-doctor.md",
+    rawFileUrl: "https://raw.githubusercontent.com/aslobodnik/claude-skills/refs/heads/main/skills/copy-doctor/SKILL.md",
     installType: "local",
     installs: "1.2k",
   },
