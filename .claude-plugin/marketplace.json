@@ -1,0 +1,15 @@
+{
+  "name": "stash.md",
+  "description": "Curated AI skills that prove themselves with demos",
+  "owner": {
+    "name": "stash.md"
+  },
+  "plugins": [
+    {
+      "name": "copy-doctor",
+      "source": "./plugins/copy-doctor",
+      "description": "Marketing copywriting expert for reviewing and improving UI copy using Ogilvy principles",
+      "version": "1.0.0"
+    }
+  ]
+}

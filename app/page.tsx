@@ -17,10 +17,14 @@ interface Skill {
   icon: string;
   isOfficial: boolean;
   githubUrl: string;
-  repoUrl?: string; // For npx skills add command
-  rawFileUrl?: string; // For local skills - raw file URL
-  installType: "npx" | "local";
-  installs?: string; // e.g. "12.4k"
+  installType: "plugin" | "npx" | "marketplace";
+  // For plugin type (Claude Code official)
+  pluginCommand?: string;
+  // For npx type (skills.sh)
+  npxRepo?: string;
+  // For marketplace type (stash.md hosted)
+  marketplaceRepo?: string;
+  installs?: string;
 }
 
 const SKILLS: Skill[] = [
@@ -30,9 +34,9 @@ const SKILLS: Skill[] = [
     description: "Create distinctive sites.",
     icon: "✦",
     isOfficial: true,
-    githubUrl: "https://github.com/anthropics/skills",
-    repoUrl: "https://github.com/anthropics/skills",
-    installType: "npx",
+    githubUrl: "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/frontend-design",
+    installType: "plugin",
+    pluginCommand: "/plugin install frontend-design",
     installs: "8.2k",
   },
   {
@@ -41,9 +45,9 @@ const SKILLS: Skill[] = [
     description: "Less code is better code.",
     icon: "◇",
     isOfficial: true,
-    githubUrl: "https://github.com/anthropics/skills",
-    repoUrl: "https://github.com/anthropics/skills",
-    installType: "npx",
+    githubUrl: "https://github.com/anthropics/claude-plugins-official/tree/main/plugins/code-simplifier",
+    installType: "plugin",
+    pluginCommand: "/plugin install code-simplifier",
     installs: "5.1k",
   },
   {
@@ -53,8 +57,8 @@ const SKILLS: Skill[] = [
     icon: "▶",
     isOfficial: false,
     githubUrl: "https://github.com/remotion-dev/skills",
-    repoUrl: "https://github.com/remotion-dev/skills",
     installType: "npx",
+    npxRepo: "remotion-dev/skills",
     installs: "2.3k",
   },
   {
@@ -63,9 +67,9 @@ const SKILLS: Skill[] = [
     description: "Words that sell.",
     icon: "✂",
     isOfficial: false,
-    githubUrl: "https://github.com/aslobodnik/claude-skills/tree/main/skills/copy-doctor",
-    rawFileUrl: "https://raw.githubusercontent.com/aslobodnik/claude-skills/refs/heads/main/skills/copy-doctor/SKILL.md",
-    installType: "local",
+    githubUrl: "https://github.com/aslobodnik/stash.md/tree/main/plugins/copy-doctor",
+    installType: "marketplace",
+    marketplaceRepo: "aslobodnik/stash.md",
     installs: "1.2k",
   },
 ];
@@ -240,8 +244,9 @@ export default function Home() {
                 <InstallSection
                   skillName={currentSkill.name}
                   installType={currentSkill.installType}
-                  repoUrl={currentSkill.repoUrl}
-                  rawFileUrl={currentSkill.rawFileUrl}
+                  pluginCommand={currentSkill.pluginCommand}
+                  npxRepo={currentSkill.npxRepo}
+                  marketplaceRepo={currentSkill.marketplaceRepo}
                 />
 
                 {/* Social proof footer */}
