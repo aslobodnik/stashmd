@@ -296,19 +296,22 @@ export default function Home() {
             color: "var(--text-muted)",
           }}
         >
-          <svg width="18" height="18" viewBox="0 0 48 48" style={{ filter: "drop-shadow(0 0 3px rgba(251,191,36,0.4))" }}>
+          <svg width="20" height="20" viewBox="0 0 48 48" style={{ filter: "drop-shadow(0 0 4px rgba(251,191,36,0.3))" }}>
             <defs>
               <linearGradient id="footerGold" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#fcd34d"/>
-                <stop offset="100%" stopColor="#f59e0b"/>
+                <stop offset="0%" stopColor="#fde68a"/>
+                <stop offset="50%" stopColor="#fbbf24"/>
+                <stop offset="100%" stopColor="#b45309"/>
               </linearGradient>
             </defs>
-            <rect x="2" y="2" width="44" height="44" rx="10" fill="var(--bg-surface)"/>
+            <circle cx="24" cy="24" r="22" fill="var(--bg-surface)"/>
+            <circle cx="24" cy="24" r="20" fill="none" stroke="url(#footerGold)" strokeWidth="1.5"/>
+            <circle cx="24" cy="24" r="17" fill="none" stroke="url(#footerGold)" strokeWidth="0.75" opacity="0.5"/>
             <path
-              d="M32 14 C32 14 28 10 22 10 C16 10 12 14 12 18 C12 22 16 24 22 26 C28 28 32 30 32 34 C32 38 28 42 22 42 C16 42 12 38 12 38"
+              d="M29 13 C29 13 27 9 22 9 C16 9 13 12.5 13 16 C13 20 16.5 22 21 23.5 C26 25.5 30 27.5 30 32 C30 36.5 26 40 21 40 C16 40 13 37 13 37"
               fill="none"
               stroke="url(#footerGold)"
-              strokeWidth="5"
+              strokeWidth="4.5"
               strokeLinecap="round"
             />
           </svg>
