@@ -99,7 +99,7 @@ export function SkillCard({
             <div
               className="flex items-center justify-center w-6 h-6 rounded"
               style={{
-                background: "var(--glow-gold)",
+                background: "var(--bg-deep)",
                 border: "1px solid var(--accent-gold)",
               }}
               title="stashmd native"
@@ -112,9 +112,12 @@ export function SkillCard({
                     <stop offset="100%" stopColor="#f59e0b"/>
                   </linearGradient>
                 </defs>
-                <polygon
-                  points="24,2 28,20 46,24 28,28 24,46 20,28 2,24 20,20"
-                  fill="url(#stashGold)"
+                <path
+                  d="M32 14 C32 14 28 10 22 10 C16 10 12 14 12 18 C12 22 16 24 22 26 C28 28 32 30 32 34 C32 38 28 42 22 42 C16 42 12 38 12 38"
+                  fill="none"
+                  stroke="url(#stashGold)"
+                  strokeWidth="5"
+                  strokeLinecap="round"
                 />
               </svg>
             </div>
