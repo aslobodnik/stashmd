@@ -109,13 +109,11 @@ export default function Home() {
           >
             AI skills that{" "}
             <span
-              className="italic"
+              className="italic pr-2"
               style={{
                 background: "linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                boxDecorationBreak: "clone",
-                WebkitBoxDecorationBreak: "clone",
               }}
             >
               prove themselves
