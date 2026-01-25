@@ -104,7 +104,19 @@ export function SkillCard({
               }}
               title="stashmd native"
             >
-              <span style={{ color: "var(--accent-gold)", fontSize: "12px" }}>✦</span>
+              {/* TODO: Consider professional brand design for production */}
+              <svg width="14" height="14" viewBox="0 0 48 48">
+                <defs>
+                  <linearGradient id="stashGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#fcd34d"/>
+                    <stop offset="100%" stopColor="#f59e0b"/>
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points="24,2 28,20 46,24 28,28 24,46 20,28 2,24 20,20"
+                  fill="url(#stashGold)"
+                />
+              </svg>
             </div>
           )}
         </div>
