@@ -1,79 +1,89 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
   <defs>
-    <!-- Rich gold gradient for wax seal look -->
-    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="25%" stop-color="#fbbf24"/>
-      <stop offset="75%" stop-color="#f59e0b"/>
+      <stop offset="40%" stop-color="#fbbf24"/>
       <stop offset="100%" stop-color="#b45309"/>
     </linearGradient>
-    <!-- Inner highlight -->
-    <linearGradient id="innerGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fef3c7"/>
-      <stop offset="100%" stop-color="#fcd34d"/>
-    </linearGradient>
-    <!-- Embossed effect -->
-    <filter id="emboss" x="-10%" y="-10%" width="120%" height="120%">
-      <feGaussianBlur stdDeviation="0.5" result="blur"/>
-      <feOffset dx="0.5" dy="0.5" result="offset"/>
-      <feMerge>
-        <feMergeNode in="offset"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
 
-  <!-- TODO: Consider professional brand design for production -->
+  <!-- Background -->
+  <circle cx="24" cy="24" r="23" fill="#0c0a09"/>
 
-  <!-- Circular seal background -->
-  <circle cx="24" cy="24" r="22" fill="#0c0a09"/>
+  <!-- Outer ring -->
+  <circle cx="24" cy="24" r="21" fill="none" stroke="url(#gold)" stroke-width="1.2"/>
 
-  <!-- Outer decorative ring -->
-  <circle cx="24" cy="24" r="20" fill="none" stroke="url(#goldGradient)" stroke-width="1.5"/>
+  <!-- Ornate flourish border - 8 curling vine motifs with trefoils -->
+  <g fill="url(#gold)" stroke="url(#gold)" stroke-width="0.5" transform="translate(24,24)">
 
-  <!-- Inner decorative ring -->
-  <circle cx="24" cy="24" r="17" fill="none" stroke="url(#goldGradient)" stroke-width="0.75" opacity="0.6"/>
+    <!-- Cardinal flourishes (N, E, S, W) - larger with trefoil -->
+    <g transform="rotate(0)">
+      <!-- Curling vine -->
+      <path d="M0,-15 C-2,-16 -3,-18 -1,-19 C1,-20 3,-18 2,-16 C1,-15 0,-16 0,-15" fill="none"/>
+      <path d="M0,-15 C2,-16 3,-18 1,-19 C-1,-20 -3,-18 -2,-16 C-1,-15 0,-16 0,-15" fill="none"/>
+      <!-- Trefoil flower -->
+      <circle cx="0" cy="-19" r="1" fill="url(#gold)"/>
+      <circle cx="-1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+      <circle cx="1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+    </g>
 
-  <!-- Elegant serif S - wax seal style, like a monogram -->
-  <!-- The S has thick-thin contrast and graceful serifs -->
-  <g filter="url(#emboss)">
-    <!-- Main S stroke - calligraphic with contrast -->
-    <path
-      d="M29 13
-         C29 13 27 9 22 9
-         C16 9 13 12.5 13 16
-         C13 20 16.5 22 21 23.5
-         C26 25.5 30 27.5 30 32
-         C30 36.5 26 40 21 40
-         C16 40 13 37 13 37"
-      fill="none"
-      stroke="url(#goldGradient)"
-      stroke-width="4.5"
-      stroke-linecap="round"
-    />
+    <g transform="rotate(90)">
+      <path d="M0,-15 C-2,-16 -3,-18 -1,-19 C1,-20 3,-18 2,-16 C1,-15 0,-16 0,-15" fill="none"/>
+      <path d="M0,-15 C2,-16 3,-18 1,-19 C-1,-20 -3,-18 -2,-16 C-1,-15 0,-16 0,-15" fill="none"/>
+      <circle cx="0" cy="-19" r="1" fill="url(#gold)"/>
+      <circle cx="-1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+      <circle cx="1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+    </g>
 
-    <!-- Top serif flourish -->
-    <path
-      d="M29 13 L32 11 M29 13 L31 15"
-      fill="none"
-      stroke="url(#innerGold)"
-      stroke-width="2"
-      stroke-linecap="round"
-    />
+    <g transform="rotate(180)">
+      <path d="M0,-15 C-2,-16 -3,-18 -1,-19 C1,-20 3,-18 2,-16 C1,-15 0,-16 0,-15" fill="none"/>
+      <path d="M0,-15 C2,-16 3,-18 1,-19 C-1,-20 -3,-18 -2,-16 C-1,-15 0,-16 0,-15" fill="none"/>
+      <circle cx="0" cy="-19" r="1" fill="url(#gold)"/>
+      <circle cx="-1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+      <circle cx="1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+    </g>
 
-    <!-- Bottom serif flourish -->
-    <path
-      d="M13 37 L10 39 M13 37 L11 35"
-      fill="none"
-      stroke="url(#innerGold)"
-      stroke-width="2"
-      stroke-linecap="round"
-    />
+    <g transform="rotate(270)">
+      <path d="M0,-15 C-2,-16 -3,-18 -1,-19 C1,-20 3,-18 2,-16 C1,-15 0,-16 0,-15" fill="none"/>
+      <path d="M0,-15 C2,-16 3,-18 1,-19 C-1,-20 -3,-18 -2,-16 C-1,-15 0,-16 0,-15" fill="none"/>
+      <circle cx="0" cy="-19" r="1" fill="url(#gold)"/>
+      <circle cx="-1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+      <circle cx="1.2" cy="-17.5" r="0.6" fill="url(#gold)"/>
+    </g>
+
+    <!-- Diagonal flourishes (NE, SE, SW, NW) - simpler scroll -->
+    <g transform="rotate(45)">
+      <path d="M0,-16 C-1.5,-17 -1,-19 0.5,-18.5 C1.5,-18 1,-16 0,-16" fill="none"/>
+      <circle cx="0" cy="-18.5" r="0.8" fill="url(#gold)"/>
+    </g>
+
+    <g transform="rotate(135)">
+      <path d="M0,-16 C-1.5,-17 -1,-19 0.5,-18.5 C1.5,-18 1,-16 0,-16" fill="none"/>
+      <circle cx="0" cy="-18.5" r="0.8" fill="url(#gold)"/>
+    </g>
+
+    <g transform="rotate(225)">
+      <path d="M0,-16 C-1.5,-17 -1,-19 0.5,-18.5 C1.5,-18 1,-16 0,-16" fill="none"/>
+      <circle cx="0" cy="-18.5" r="0.8" fill="url(#gold)"/>
+    </g>
+
+    <g transform="rotate(315)">
+      <path d="M0,-16 C-1.5,-17 -1,-19 0.5,-18.5 C1.5,-18 1,-16 0,-16" fill="none"/>
+      <circle cx="0" cy="-18.5" r="0.8" fill="url(#gold)"/>
+    </g>
   </g>
 
-  <!-- Small decorative dots - like on a wax seal -->
-  <circle cx="24" cy="6" r="1" fill="url(#goldGradient)"/>
-  <circle cx="24" cy="42" r="1" fill="url(#goldGradient)"/>
-  <circle cx="6" cy="24" r="1" fill="url(#goldGradient)"/>
-  <circle cx="42" cy="24" r="1" fill="url(#goldGradient)"/>
+  <!-- Inner decorative ring -->
+  <circle cx="24" cy="24" r="12" fill="none" stroke="url(#gold)" stroke-width="0.5"/>
+
+  <!-- Elegant Serif S -->
+  <text
+    x="24"
+    y="32"
+    text-anchor="middle"
+    fill="url(#gold)"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="22"
+    font-weight="400"
+  >S</text>
 </svg>

@@ -100,7 +100,7 @@ export function SkillCard({
               className="flex items-center justify-center w-6 h-6"
               title="stashmd native"
             >
-              {/* Wax seal style S monogram */}
+              {/* Wax seal style S monogram with flourishes */}
               <svg width="24" height="24" viewBox="0 0 48 48">
                 <defs>
                   <linearGradient id="stashGold" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -109,16 +109,17 @@ export function SkillCard({
                     <stop offset="100%" stopColor="#b45309"/>
                   </linearGradient>
                 </defs>
-                <circle cx="24" cy="24" r="22" fill="#0c0a09"/>
-                <circle cx="24" cy="24" r="20" fill="none" stroke="url(#stashGold)" strokeWidth="1.5"/>
-                <circle cx="24" cy="24" r="17" fill="none" stroke="url(#stashGold)" strokeWidth="0.75" opacity="0.5"/>
-                <path
-                  d="M29 13 C29 13 27 9 22 9 C16 9 13 12.5 13 16 C13 20 16.5 22 21 23.5 C26 25.5 30 27.5 30 32 C30 36.5 26 40 21 40 C16 40 13 37 13 37"
-                  fill="none"
-                  stroke="url(#stashGold)"
-                  strokeWidth="4.5"
-                  strokeLinecap="round"
-                />
+                <circle cx="24" cy="24" r="23" fill="#0c0a09"/>
+                <circle cx="24" cy="24" r="21" fill="none" stroke="url(#stashGold)" strokeWidth="1.2"/>
+                {/* Flourish dots */}
+                <g fill="url(#stashGold)">
+                  <circle cx="24" cy="5" r="1.2"/><circle cx="24" cy="43" r="1.2"/>
+                  <circle cx="5" cy="24" r="1.2"/><circle cx="43" cy="24" r="1.2"/>
+                  <circle cx="10" cy="10" r="0.8"/><circle cx="38" cy="10" r="0.8"/>
+                  <circle cx="10" cy="38" r="0.8"/><circle cx="38" cy="38" r="0.8"/>
+                </g>
+                <circle cx="24" cy="24" r="12" fill="none" stroke="url(#stashGold)" strokeWidth="0.5"/>
+                <text x="24" y="32" textAnchor="middle" fill="url(#stashGold)" fontFamily="Georgia, serif" fontSize="22">S</text>
               </svg>
             </div>
           )}
