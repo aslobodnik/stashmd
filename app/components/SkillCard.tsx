@@ -94,6 +94,19 @@ export function SkillCard({
               </svg>
             </div>
           )}
+
+          {id === "copy-doctor" && (
+            <div
+              className="flex items-center justify-center w-6 h-6 rounded"
+              style={{
+                background: "var(--glow-gold)",
+                border: "1px solid var(--accent-gold)",
+              }}
+              title="stashmd native"
+            >
+              <span style={{ color: "var(--accent-gold)", fontSize: "12px" }}>✦</span>
+            </div>
+          )}
         </div>
 
         {/* Description */}

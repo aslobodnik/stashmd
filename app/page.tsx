@@ -58,8 +58,8 @@ const SKILLS: Skill[] = [
     description: "Words that sell.",
     icon: "✂",
     isOfficial: false,
-    githubUrl: "https://github.com/slobo/skills",
-    repoUrl: "https://github.com/slobo/skills",
+    githubUrl: "https://github.com/aslobodnik/claude-skills/tree/main/skills/copy-doctor",
+    repoUrl: "https://github.com/aslobodnik/claude-skills",
     installs: "1.2k",
   },
 ];
