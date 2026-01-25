@@ -314,7 +314,7 @@ export function BeforeAfterComparison({
       </div>
 
       {/* Action bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
         {/* Status indicator */}
         <div className="flex items-center gap-3">
           <div
@@ -369,7 +369,7 @@ export function BeforeAfterComparison({
         <button
           onClick={handleApply}
           disabled={isAnimating || isTyping}
-          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer"
+          className="group relative flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer w-full sm:w-auto"
           style={{
             background: isApplied
               ? "transparent"

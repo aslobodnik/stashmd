@@ -17,7 +17,9 @@ interface Skill {
   icon: string;
   isOfficial: boolean;
   githubUrl: string;
-  repoUrl: string; // For npx skills add command
+  repoUrl?: string; // For npx skills add command
+  rawFileUrl?: string; // For local skills - raw file URL
+  installType: "npx" | "local";
   installs?: string; // e.g. "12.4k"
 }
 
@@ -30,6 +32,7 @@ const SKILLS: Skill[] = [
     isOfficial: true,
     githubUrl: "https://github.com/anthropics/skills",
     repoUrl: "https://github.com/anthropics/skills",
+    installType: "npx",
     installs: "8.2k",
   },
   {
@@ -40,6 +43,7 @@ const SKILLS: Skill[] = [
     isOfficial: true,
     githubUrl: "https://github.com/anthropics/skills",
     repoUrl: "https://github.com/anthropics/skills",
+    installType: "npx",
     installs: "5.1k",
   },
   {
@@ -50,6 +54,7 @@ const SKILLS: Skill[] = [
     isOfficial: false,
     githubUrl: "https://github.com/remotion-dev/skills",
     repoUrl: "https://github.com/remotion-dev/skills",
+    installType: "npx",
     installs: "2.3k",
   },
   {
@@ -59,7 +64,8 @@ const SKILLS: Skill[] = [
     icon: "✂",
     isOfficial: false,
     githubUrl: "https://github.com/aslobodnik/claude-skills/tree/main/skills/copy-doctor",
-    repoUrl: "https://github.com/aslobodnik/claude-skills",
+    rawFileUrl: "https://raw.githubusercontent.com/aslobodnik/claude-skills/main/skills/copy-doctor/copy-doctor.md",
+    installType: "local",
     installs: "1.2k",
   },
 ];
@@ -233,7 +239,9 @@ export default function Home() {
                 {/* Install section */}
                 <InstallSection
                   skillName={currentSkill.name}
+                  installType={currentSkill.installType}
                   repoUrl={currentSkill.repoUrl}
+                  rawFileUrl={currentSkill.rawFileUrl}
                 />
 
                 {/* Social proof footer */}

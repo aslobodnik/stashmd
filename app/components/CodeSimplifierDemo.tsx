@@ -371,7 +371,7 @@ export function CodeSimplifierDemo() {
       </div>
 
       {/* Action bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex items-center gap-3">
           <div
             className="relative flex items-center justify-center w-8 h-8 rounded-lg"
@@ -401,7 +401,7 @@ export function CodeSimplifierDemo() {
         <button
           onClick={handleApply}
           disabled={isAnimating}
-          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer"
+          className="group relative flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer w-full sm:w-auto"
           style={{
             background: isApplied
               ? "transparent"
@@ -546,7 +546,7 @@ export function CodeSimplifierDemo() {
 
       {/* Stats bar */}
       <div
-        className="mt-4 flex items-center justify-center gap-6 py-3 rounded-xl transition-all duration-500"
+        className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-6 py-3 px-2 rounded-xl transition-all duration-500"
         style={{
           background: isApplied ? "var(--bg-surface)" : "transparent",
           border: isApplied ? "1px solid var(--border-subtle)" : "1px solid transparent",
@@ -554,7 +554,7 @@ export function CodeSimplifierDemo() {
       >
         <div className="flex items-center gap-2">
           <span
-            className="text-2xl font-bold tabular-nums transition-colors duration-300"
+            className="text-xl sm:text-2xl font-bold tabular-nums transition-colors duration-300"
             style={{ color: isApplied ? "var(--accent-gold)" : "var(--text-muted)" }}
           >
             {isApplied ? AFTER_LINES : BEFORE_LINES}
@@ -566,15 +566,15 @@ export function CodeSimplifierDemo() {
 
         {isApplied && (
           <>
-            <div className="w-px h-6" style={{ background: "var(--border-subtle)" }} />
+            <div className="hidden sm:block w-px h-6" style={{ background: "var(--border-subtle)" }} />
             <div className="flex items-center gap-2">
-              <span className="text-2xl font-bold tabular-nums" style={{ color: "#4ade80" }}>
+              <span className="text-xl sm:text-2xl font-bold tabular-nums" style={{ color: "#4ade80" }}>
                 -{REDUCTION}%
               </span>
               <span className="text-xs" style={{ color: "var(--text-muted)" }}>smaller</span>
             </div>
-            <div className="w-px h-6" style={{ background: "var(--border-subtle)" }} />
-            <div className="flex items-center gap-2">
+            <div className="hidden sm:block w-px h-6" style={{ background: "var(--border-subtle)" }} />
+            <div className="hidden sm:flex items-center gap-2">
               <span className="text-2xl font-bold tabular-nums" style={{ color: "var(--text-primary)" }}>
                 0
               </span>

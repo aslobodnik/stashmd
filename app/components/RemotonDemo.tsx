@@ -578,7 +578,7 @@ export function RemotonDemo() {
       </div>
 
       {/* Action bar */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
         <div className="flex items-center gap-3">
           <div
             className="relative flex items-center justify-center w-8 h-8 rounded-lg"
@@ -608,7 +608,7 @@ export function RemotonDemo() {
         <button
           onClick={handleTryIt}
           disabled={phase === 'playing'}
-          className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer"
+          className="group relative flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 overflow-hidden cursor-pointer w-full sm:w-auto"
           style={{
             background: phase === 'done'
               ? "transparent"
@@ -657,7 +657,7 @@ export function RemotonDemo() {
 
       {/* Result indicator */}
       <div
-        className="mt-4 flex items-center justify-center gap-4 py-3 rounded-xl transition-all duration-500"
+        className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:gap-4 py-3 px-2 rounded-xl transition-all duration-500"
         style={{
           background: phase === 'done' ? "var(--bg-surface)" : "transparent",
           border: phase === 'done' ? "1px solid var(--border-subtle)" : "1px solid transparent",
@@ -673,18 +673,18 @@ export function RemotonDemo() {
           <>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              <span className="text-xs sm:text-sm" style={{ color: "var(--text-secondary)" }}>
                 6 scenes
               </span>
             </div>
-            <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
+            <div className="hidden sm:block w-px h-4" style={{ background: "var(--border-subtle)" }} />
             <div className="flex items-center gap-2">
-              <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
+              <span className="text-xs sm:text-sm" style={{ color: "var(--text-secondary)" }}>
                 5 transitions
               </span>
             </div>
-            <div className="w-px h-4" style={{ background: "var(--border-subtle)" }} />
-            <div className="flex items-center gap-2">
+            <div className="hidden sm:block w-px h-4" style={{ background: "var(--border-subtle)" }} />
+            <div className="hidden sm:flex items-center gap-2">
               <span className="text-sm" style={{ color: "var(--text-secondary)" }}>
                 Character cascade
               </span>
