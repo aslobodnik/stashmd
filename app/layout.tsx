@@ -17,7 +17,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "stashmd - AI skills that prove themselves",
   description: "A curated directory of AI agent skills where every skill proves itself with before/after demos. See the difference before you install.",
-  metadataBase: new URL("https://stashmd.com"),
+  metadataBase: new URL("https://www.stash.md"),
   openGraph: {
     title: "stashmd - AI skills that prove themselves",
     description: "A curated directory of AI agent skills where every skill proves itself with before/after demos.",
